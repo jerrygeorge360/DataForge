@@ -1,0 +1,27 @@
+{
+  "name": "dataforge",
+  "version": "1.0.0",
+  "description": "DataForge - Decentralized data marketplace on Filecoin",
+  "main": "index.js",
+  "scripts": {
+    "test": "hardhat test",
+    "compile": "hardhat compile",
+    "deploy": "hardhat run deploy/01_deploy_marketplace.ts --network calibration",
+    "deploy:local": "hardhat run deploy/01_deploy_marketplace.ts --network localhost",
+    "frontend": "cd frontend && npm run dev"
+  },
+  "keywords": ["filecoin", "marketplace", "blockchain", "data"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/node": "^20.11.0",
+    "hardhat": "^2.22.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ethers": "^6.11.0"
+  }
+}
