@@ -13,7 +13,6 @@ services:
       - ./.env
     volumes:
       - ./backend/agent_log.json:/app/agent_log.json
-      - ./backend/transfer_log.json:/app/transfer_log.json
       - ./backend/agent.json:/app/agent.json
       - ./backend/lit-auth-storage:/app/lit-auth-storage
     healthcheck:

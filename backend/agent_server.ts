@@ -246,7 +246,7 @@ async function uploadAgentCard(): Promise<string> {
 // ─────────────────────────────────────────────
 function startup() {
     const log = readLog()
-    if (!log.participantId || !log.synthesisApiKey) {
+    if (!log.participantId) {
         console.error('❌ Not registered yet. Run: npx tsx register.ts')
         process.exit(1)
     }

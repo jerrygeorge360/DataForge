@@ -27,3 +27,9 @@ Thumbs.db
 # Dev
 .gemini
 copilot-instructions.md
+
+# Backend
+backend/transfer_log.json
+backend/lit-auth-storage/
+backend/consumer_log.json
+backend/*.bin

@@ -71,9 +71,11 @@ jobs:
             AGENT_GOAL=${{ secrets.AGENT_GOAL }}
             ENVEOF
 
+            # Ensure lit-auth-storage exists for Lit Protocol sessions
+            mkdir -p backend/lit-auth-storage
+
             # Ensure required files exist
             touch backend/agent_log.json backend/transfer_log.json backend/agent.json
-            mkdir -p backend/lit-auth-storage
 
             # Restart containers
             docker-compose up --build -d
