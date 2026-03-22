@@ -33,11 +33,11 @@ jobs:
       
       - name: Check if secrets are visible
         run: |
-          echo "AZURE_VM_HOST value length: $$   (echo -n '   $${{ secrets.AZURE_VM_HOST }}' | wc -c)"
+          echo "AZURE_VM_HOST (masked if secret): ${{ secrets.AZURE_VM_HOST }}"
+          echo "AZURE_VM_HOST length: $(printf '%s' '${{ secrets.AZURE_VM_HOST }}' | wc -c | xargs)"
           echo "Is host set? ${{ secrets.AZURE_VM_HOST != '' && 'YES' || 'NO/EMPTY' }}"
-          echo "Username: ${{ secrets.AZURE_VM_USER || 'not set' }}"
-          echo "SSH key present? ${{ secrets.AZURE_VM_SSH_KEY != '' && 'YES (length >0)' || 'NO/MISSING' }}"
-                
+          echo "AZURE_VM_USER: ${{ secrets.AZURE_VM_USER || 'not set' }}"
+          echo "SSH key present? ${{ secrets.AZURE_VM_SSH_KEY != '' && 'YES' || 'MISSING' }}"
 
       # 3. Deploy to Azure VM
       - name: Deploy to VM
@@ -46,6 +46,7 @@ jobs:
           host:     ${{ secrets.AZURE_VM_HOST }}
           username: ${{ secrets.AZURE_VM_USER }}
           key:      ${{ secrets.AZURE_VM_SSH_KEY }}
+          port:     22
           script: |
             set -e
 
