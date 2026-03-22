@@ -29,6 +29,14 @@ jobs:
         run: |
           npm install --legacy-peer-deps
           npx vite build
+      
+      - name: Check if secrets are visible
+        run: |
+          echo "AZURE_VM_HOST value length: $$   (echo -n '   $${{ secrets.AZURE_VM_HOST }}' | wc -c)"
+          echo "Is host set? ${{ secrets.AZURE_VM_HOST != '' && 'YES' || 'NO/EMPTY' }}"
+          echo "Username: ${{ secrets.AZURE_VM_USER || 'not set' }}"
+          echo "SSH key present? ${{ secrets.AZURE_VM_SSH_KEY != '' && 'YES (length >0)' || 'NO/MISSING' }}"
+                
 
       # 3. Deploy to Azure VM
       - name: Deploy to VM
