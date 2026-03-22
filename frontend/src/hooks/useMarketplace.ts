@@ -30,8 +30,8 @@ export const MARKETPLACE_ABI = [
 ]
 
 // Get contract address from environment variable
-export const VITE_CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS
-const CONTRACT_ADDRESS = VITE_CONTRACT_ADDRESS || ''
+export const MARKETPLACE_ADDRESS = import.meta.env.MARKETPLACE_ADDRESS
+const CONTRACT_ADDRESS = MARKETPLACE_ADDRESS || ''
 
 export function useMarketplace(provider: BrowserProvider | JsonRpcProvider | undefined | null) {
   const contract = useMemo(() => {

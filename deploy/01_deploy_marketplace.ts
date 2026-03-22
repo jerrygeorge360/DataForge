@@ -16,8 +16,8 @@ async function main() {
   const address = await marketplace.getAddress()
 
   console.log("✅ DataMarketplace deployed to:", address)
-  console.log("Add this to your frontend .env:")
-  console.log(`VITE_CONTRACT_ADDRESS=${address}`)
+  console.log("Add this to your root .env:")
+  console.log(`MARKETPLACE_ADDRESS=${address}`)
   console.log("\nView on explorer:")
   console.log(`https://calibration.filfox.info/en/address/${address}`)
 }

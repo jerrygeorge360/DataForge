@@ -5,7 +5,7 @@ import {
     Download,
     BarChart3
 } from 'lucide-react'
-import { useMarketplace, MARKETPLACE_ABI, VITE_CONTRACT_ADDRESS } from '../hooks/useMarketplace'
+import { useMarketplace, MARKETPLACE_ABI, MARKETPLACE_ADDRESS } from '../hooks/useMarketplace'
 
 interface ProducerAnalyticsProps {
     provider: BrowserProvider
@@ -35,7 +35,7 @@ export default function ProducerAnalytics({ provider, account }: ProducerAnalyti
     useEffect(() => {
         const loadAnalytics = async () => {
             try {
-                const contract = new Contract(VITE_CONTRACT_ADDRESS || '', MARKETPLACE_ABI, provider)
+                const contract = new Contract(MARKETPLACE_ADDRESS || '', MARKETPLACE_ABI, provider)
                 const currentBlock = await provider.getBlockNumber()
                 const startBlock = Math.max(0, currentBlock - 50000) // Approx 7 days
 

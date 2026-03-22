@@ -6,7 +6,8 @@ import {
     LogOut,
     Settings,
     HelpCircle,
-    Database
+    Database,
+    Bot
 } from 'lucide-react'
 import { formatEther } from 'ethers'
 import ThemeToggle from '../ThemeToggle'
@@ -29,6 +30,7 @@ export default function Sidebar({ account, balance, onDisconnect, onBuyCrypto }:
     ]
 
     const secondaryItems = [
+        { label: 'Agent Access', icon: Bot, path: '/agent' },
         { label: 'Settings', icon: Settings, path: '/settings' },
         { label: 'Documentation', icon: HelpCircle, path: '/docs' },
     ]

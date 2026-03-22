@@ -3,7 +3,7 @@ import { createAuthManager, storagePlugins } from '@lit-protocol/auth'
 import { nagaDev } from '@lit-protocol/networks'
 import { createWalletClient, custom ,getAddress} from 'viem'
 import { filecoinCalibration } from 'viem/chains'
-import { VITE_CONTRACT_ADDRESS } from '../hooks/useMarketplace'
+import { MARKETPLACE_ADDRESS } from '../hooks/useMarketplace'
 
 const authManager = createAuthManager({
     storage: storagePlugins.localStorage({
@@ -34,7 +34,7 @@ export function useLit() {
         const accs = [
             {
                 conditionType: 'evmContract' as const,
-                contractAddress: VITE_CONTRACT_ADDRESS,
+                contractAddress: MARKETPLACE_ADDRESS,
                 functionName: 'isAuthorized',
                 functionParams: [listingId.toString(), ':userAddress'],
                 functionAbi: {

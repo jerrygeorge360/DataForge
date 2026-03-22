@@ -1,0 +1,41 @@
+{
+  "name": "dataforge-agent",
+  "version": "1.0.0",
+  "description": "DataForge Platform Agent — ERC-8004 registered autonomous broker for encrypted Filecoin datasets",
+  "type": "module",
+  "main": "dist/agent_server.js",
+  "scripts": {
+    "dev": "tsx agent_server.ts",
+    "build": "tsc",
+    "start": "node dist/agent_server.js",
+    "register": "tsx register.ts",
+    "transfer": "tsx transfer.ts",
+    "consumer": "tsx consumer_agent.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "@filoz/synapse-sdk": "^0.39.0",
+    "@lit-protocol/auth": "latest",
+    "@lit-protocol/lit-client": "latest",
+    "@lit-protocol/networks": "latest",
+    "@x402/core": "latest",
+    "@x402/evm": "latest",
+    "@x402/express": "latest",
+    "@x402/fetch": "latest",
+    "axios": "^1.13.6",
+    "dotenv": "^16.0.0",
+    "ethers": "^6.16.0",
+    "express": "^4.18.0",
+    "viem": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.0",
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

@@ -17,7 +17,7 @@ const config: HardhatUserConfig = {
   },
   networks: {
     calibration: {
-      url: process.env.CALIBRATION_RPC || "https://api.calibration.node.glif.io/rpc/v1",
+      url: process.env.FILECOIN_RPC || "https://api.calibration.node.glif.io/rpc/v1",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 314159
     },

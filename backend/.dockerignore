@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+agent_log.json
+transfer_log.json
+consumer_log.json
+lit-auth-storage
+*.bin
+*.log
+EOF

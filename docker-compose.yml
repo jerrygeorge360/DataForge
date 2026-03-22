@@ -1,0 +1,43 @@
+services:
+
+  # ── Platform Agent (Node.js) ──────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dataforge-agent
+    restart: always
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./.env
+    volumes:
+      - ./backend/agent_log.json:/app/agent_log.json
+      - ./backend/transfer_log.json:/app/transfer_log.json
+      - ./backend/agent.json:/app/agent.json
+      - ./backend/lit-auth-storage:/app/lit-auth-storage
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:4000/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ── Frontend (React + Nginx) ──────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        MARKETPLACE_ADDRESS: ${MARKETPLACE_ADDRESS}
+        FILECOIN_RPC: ${FILECOIN_RPC}
+        CHAIN_ID: ${CHAIN_ID}
+    container_name: dataforge-frontend
+    restart: always
+    ports:
+      - "8080:80"
+    env_file:
+      - ./.env
+    depends_on:
+      backend:
+        condition: service_healthy

@@ -6,6 +6,7 @@ import Browse from './pages/Browse'
 import ListingDetail from './pages/ListingDetail'
 import SellerOnboarding from './pages/SellerOnboarding'
 import Dashboard from './pages/Dashboard'
+import AgentAccess from './pages/AgentAccess'
 import TransakWidget from './components/TransakWidget'
 import { ThemeProvider } from './context/ThemeContext'
 import AppShell from './components/layout/AppShell'
@@ -145,6 +146,24 @@ function App() {
             >
               <WorkspaceRoute>
                 <SellerOnboarding provider={provider} account={account} />
+              </WorkspaceRoute>
+            </AppShell>
+          }
+        />
+
+        <Route
+          path="/agent"
+          element={
+            <AppShell
+              account={account}
+              balance={balance}
+              onConnect={connectWallet}
+              onDisconnect={disconnectWallet}
+              isConnecting={isConnecting}
+              onBuyCrypto={() => setShowTransak(true)}
+            >
+              <WorkspaceRoute>
+                <AgentAccess />
               </WorkspaceRoute>
             </AppShell>
           }

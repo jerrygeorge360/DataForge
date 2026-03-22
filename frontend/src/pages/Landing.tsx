@@ -142,6 +142,33 @@ export default function Landing() {
                                 </div>
                             </div>
                         </Card>
+
+                        {/* AI Agents Panel */}
+                        <Card style={{ textAlign: 'left' }}>
+                            <div style={{ padding: '32px' }}>
+                                <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-1)', marginBottom: '32px' }}>
+                                    For AI Agents
+                                </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                                    {[
+                                        { n: '1', t: 'Programmatic Discovery', d: 'Discover datasets natively via ERC-8004 registry and API endpoints.' },
+                                        { n: '2', t: 'x402 Microtransactions', d: 'Agents authorize access by paying USDC tolls seamlessly on Base.' },
+                                        { n: '3', t: 'Lit-Powered Ingestion', d: 'Server-side decryption streams Filecoin data directly into agent memory.' }
+                                    ].map((step) => (
+                                        <div key={step.n} style={{ display: 'flex', gap: '16px' }}>
+                                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--bg-subtle)', border: '1px solid var(--border)', color: 'var(--text-2)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                                                {step.n}
+                                            </div>
+                                            <div>
+                                                <div style={{ fontWeight: 'bold', color: 'var(--text-1)', marginBottom: '4px' }}>{step.t}</div>
+                                                <div style={{ fontSize: '14px', color: 'var(--text-2)' }}>{step.d}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </Card>
                     </div>
                 </div>
             </section>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { BrowserProvider, Contract } from 'ethers'
-import { useMarketplace, MARKETPLACE_ABI, VITE_CONTRACT_ADDRESS } from './useMarketplace'
+import { useMarketplace, MARKETPLACE_ABI, MARKETPLACE_ADDRESS } from './useMarketplace'
 
 export interface ProducerStats {
     revenue: bigint
@@ -29,7 +29,7 @@ export function useProducerStats(provider: BrowserProvider | null, account: stri
         if (!provider || !account) return
         setLoading(true)
         try {
-            const contract = new Contract(VITE_CONTRACT_ADDRESS, MARKETPLACE_ABI, provider)
+            const contract = new Contract(MARKETPLACE_ADDRESS, MARKETPLACE_ABI, provider)
             const currentBlock = await provider.getBlockNumber()
             const startBlock = Math.max(0, currentBlock - 2000) // RPC limit is ~16h (2000 blocks)
 

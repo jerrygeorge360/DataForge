@@ -53,7 +53,7 @@ function ListingRow({ listing, provider, account, onPurchaseSuccess }: ListingRo
 
             if (listing.listingType === 1) {
                 const contract = new Contract(
-                    import.meta.env.VITE_CONTRACT_ADDRESS,
+                    import.meta.env.MARKETPLACE_ADDRESS,
                     ['event DatasetPurchased(uint256 indexed listingId, address indexed buyer, address indexed seller, uint256 price, string cid)'],
                     provider
                 )
@@ -98,6 +98,7 @@ function ListingRow({ listing, provider, account, onPurchaseSuccess }: ListingRo
             try {
                 const decryptedFile = await downloadAndDecrypt(
                     cid,
+                    account,
                     (c: string) => download(account, c)
                 )
 

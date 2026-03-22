@@ -1,0 +1,8 @@
+{
+  "status": "transfer_complete",
+  "txHash": "0x5a1fc56617e2ed0fd347f1b8b27f8d5a486a41113a73f8766905d80428702011",
+  "ownerAddress": "0xce151D40926BAd0815B587B759609e746F469C84",
+  "custodyType": "self_custody",
+  "completedAt": "2026-03-21T14:01:35.990Z",
+  "basescanUrl": "https://basescan.org/tx/0x5a1fc56617e2ed0fd347f1b8b27f8d5a486a41113a73f8766905d80428702011"
+}

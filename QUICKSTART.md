@@ -18,7 +18,7 @@ All 18 tests should pass ✅
 First, create a `.env` file in the root directory:
 ```bash
 PRIVATE_KEY=0x...  # Your deployer wallet private key
-CALIBRATION_RPC=https://api.calibration.node.glif.io/rpc/v1
+FILECOIN_RPC=https://api.calibration.node.glif.io/rpc/v1
 ```
 
 Make sure you have at least **1 tFIL** in your deployer wallet. Get testnet tokens from:
@@ -33,9 +33,9 @@ Copy the deployed contract address from the output.
 
 ### 4. Configure Frontend
 
-Create `frontend/.env`:
+Update your root `.env`:
 ```bash
-VITE_CONTRACT_ADDRESS=0x...  # Paste the deployed contract address
+MARKETPLACE_ADDRESS=0x...  # Paste the deployed contract address
 ```
 
 ### 5. Run Frontend
@@ -96,7 +96,7 @@ dataforge/
 ## Troubleshooting
 
 ### "Contract address not set"
-Make sure you've set `VITE_CONTRACT_ADDRESS` in `frontend/.env`
+Make sure you've set `MARKETPLACE_ADDRESS` in `.env`
 
 ### "Insufficient storage allowance"
 You need USDFC deposited for Synapse SDK uploads. Get USDFC from the faucet.

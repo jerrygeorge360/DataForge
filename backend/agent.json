@@ -1,0 +1,43 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "DataForge Platform Agent",
+  "description": "Autonomous broker for Lit-encrypted datasets on DataForge. External agents discover datasets, pay via x402 (USDC on Base Sepolia), and receive decrypted data. Sellers earn FIL automatically via the onchain marketplace.",
+  "version": "1.0.0",
+  "image": "https://dataforge.app/logo.png",
+  "operator": "0xce151D40926BAd0815B587B759609e746F469C84",
+  "capabilities": [
+    "dataset.discover",
+    "dataset.broker",
+    "dataset.decrypt"
+  ],
+  "services": [
+    {
+      "name": "discovery",
+      "endpoint": "/listings"
+    },
+    {
+      "name": "purchase",
+      "endpoint": "/dataset/:id"
+    },
+    {
+      "name": "health",
+      "endpoint": "/health"
+    }
+  ],
+  "payment": {
+    "protocol": "x402",
+    "network": "base-sepolia",
+    "token": "USDC",
+    "payTo": "0xce151D40926BAd0815B587B759609e746F469C84"
+  },
+  "storage": {
+    "network": "filecoin-calibration",
+    "sdk": "@filoz/synapse-sdk",
+    "encryption": "lit-protocol-v8-naga"
+  },
+  "identity": {
+    "standard": "ERC-8004",
+    "chain": "base-mainnet"
+  },
+  "marketplace": "0x5910e9244b42CbcA40d84878cae6ce294317E1c0"
+}

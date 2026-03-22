@@ -1,0 +1,81 @@
+name: Deploy DataForge
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Build frontend with Vite env vars baked in
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build frontend
+        working-directory: ./frontend
+        env:
+          MARKETPLACE_ADDRESS: ${{ secrets.MARKETPLACE_ADDRESS }}
+          FILECOIN_RPC:        https://api.calibration.node.glif.io/rpc/v1
+          CHAIN_ID:            314159
+        run: |
+          npm install --legacy-peer-deps
+          npx vite build
+
+      # 3. Deploy to Azure VM
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v1
+        with:
+          host:     ${{ secrets.AZURE_VM_HOST }}
+          username: ${{ secrets.AZURE_VM_USER }}
+          key:      ${{ secrets.AZURE_VM_SSH_KEY }}
+          script: |
+            set -e
+
+            # Pull latest code
+            cd ~/dataforge
+            git pull origin main
+
+            # Write root .env from GitHub secrets (overwrites on every deploy)
+            cat > .env << 'ENVEOF'
+            # ── Synthesis Registration ─────────────────────────────
+            HUMAN_NAME=${{ secrets.HUMAN_NAME }}
+            HUMAN_EMAIL=${{ secrets.HUMAN_EMAIL }}
+            HUMAN_SOCIAL=${{ secrets.HUMAN_SOCIAL }}
+            HUMAN_BACKGROUND=Builder
+            HUMAN_PROBLEM=${{ secrets.HUMAN_PROBLEM }}
+            SYNTHESIS_TEAM_CODE=${{ secrets.SYNTHESIS_TEAM_CODE }}
+
+            # ── Platform Agent ─────────────────────────────────────
+            AGENT_PRIVATE_KEY=${{ secrets.AGENT_PRIVATE_KEY }}
+            MARKETPLACE_ADDRESS=${{ secrets.MARKETPLACE_ADDRESS }}
+
+            # ── RPC Endpoints ──────────────────────────────────────
+            FILECOIN_RPC=https://api.calibration.node.glif.io/rpc/v1
+            BASE_SEPOLIA_RPC=https://sepolia.base.org
+            CHAIN_ID=314159
+            PORT=4000
+
+            # ── Consumer Agent (demo only) ─────────────────────────
+            CONSUMER_PRIVATE_KEY=${{ secrets.CONSUMER_PRIVATE_KEY }}
+            NEAR_AI_API_KEY=${{ secrets.NEAR_AI_API_KEY }}
+            PLATFORM_AGENT_URL=http://localhost:4000
+            BUDGET_USDC=0.10
+            AGENT_GOAL=${{ secrets.AGENT_GOAL }}
+            ENVEOF
+
+            # Ensure required files exist
+            touch backend/agent_log.json backend/transfer_log.json backend/agent.json
+            mkdir -p backend/lit-auth-storage
+
+            # Restart containers
+            docker-compose up --build -d
+
+            echo "✅ Deployment complete!"
