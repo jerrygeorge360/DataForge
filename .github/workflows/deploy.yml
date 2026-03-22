@@ -32,7 +32,7 @@ jobs:
 
       # 3. Deploy to Azure VM
       - name: Deploy to VM
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@master
         with:
           host:     ${{ secrets.AZURE_VM_HOST }}
           username: ${{ secrets.AZURE_VM_USER }}
