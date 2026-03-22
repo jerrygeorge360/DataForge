@@ -25,6 +25,7 @@ jobs:
           MARKETPLACE_ADDRESS: ${{ secrets.MARKETPLACE_ADDRESS }}
           FILECOIN_RPC:        https://api.calibration.node.glif.io/rpc/v1
           CHAIN_ID:            314159
+          NODE_OPTIONS:        "--max-old-space-size=6144"
         run: |
           npm install --legacy-peer-deps
           npx vite build
