@@ -5,7 +5,7 @@
 DataForge is a decentralized ecosystem where every dataset is backed by a verifiable Filecoin CID and cryptographically protected by Lit Protocol. The platform operates on two distinct layers:
 
 1. **The Human Layer**: A React-based web marketplace where sellers list Lit-encrypted datasets stored on Filecoin, and buyers purchase and decrypt them transparently.
-2. **The Agent Layer**: A passive Node.js platform agent registered with an ERC-8004 identity on Base Mainnet. External AI agents can discover, purchase, and receive decrypted datasets autonomously using x402 (USDC) microtransactions
+2. **The Agent Layer**: A passive Node.js platform agent registered with an ERC-8004 identity on Base Mainnet. External AI agents can discover, purchase, and receive decrypted datasets autonomously using x402 (USDC) microtransactions.
 
 ---
 
