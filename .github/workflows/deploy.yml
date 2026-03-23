@@ -51,7 +51,7 @@ jobs:
             set -e
 
             # Pull latest code
-            cd ~/dataforge
+            cd ~/dataforge || git clone https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/jerrygeorge360/DataForge.git ~/dataforge && cd ~/dataforge
             git pull origin main
 
             # Write root .env from GitHub secrets (overwrites on every deploy)
