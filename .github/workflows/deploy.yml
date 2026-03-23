@@ -89,6 +89,6 @@ jobs:
             touch backend/agent_log.json backend/transfer_log.json backend/agent.json
 
             # Restart containers
-            docker-compose up --build -d
+            docker compose up --build -d
 
             echo "✅ Deployment complete!"
