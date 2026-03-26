@@ -5,10 +5,11 @@ import { ChevronRight, Home}from "lucide-react"
 interface PageHeaderProps {
     title: string
     actions?: React.ReactNode
+    subtitle?:string;
     breadcrumbs?: { label: string; path: string }[]
 }
 
-export function PageHeader({ title, actions, breadcrumbs }: PageHeaderProps) {
+export function PageHeader({ title, actions, breadcrumbs, subtitle }: PageHeaderProps) {
 
     return (
         <div className="flex flex-col gap-4 mb-8 sm:flex-row sm:items-end sm:justify-between border-b border-border pb-6">
@@ -34,6 +35,10 @@ export function PageHeader({ title, actions, breadcrumbs }: PageHeaderProps) {
                 <h1 className="text-2xl font-bold tracking-tight text-text-primary leading-tight">
                     {title}
                 </h1>
+
+                <p className="text-[12px] text-white">
+                    {subtitle}
+                </p>
             </div>
 
             <div className="flex items-center gap-3">

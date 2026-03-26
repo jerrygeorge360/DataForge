@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { downloadDataset } from '../filecoin'
 import { Card } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
-import { Input } from '../components/ui/Input'
-import { Shield, FileText, Database, Lock, Unlock, Search, Loader2 } from 'lucide-react'
+import { Shield,  Database,  Unlock, Search,  } from 'lucide-react'
 
 export default function DebugStorage({ account }: { account?: string }) {
     const address = account || (window as any).ethereum?.selectedAddress
@@ -109,7 +108,7 @@ export default function DebugStorage({ account }: { account?: string }) {
                                 }}>
                                     {result.isJson ? (
                                         <>
-                                            <div style={{ width: 40, h: 40, borderRadius: '50%', background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
+                                            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
                                                 <Shield size={20} />
                                             </div>
                                             <span style={{ fontWeight: 700, color: '#22c55e' }}>ENCRYPTED</span>
@@ -117,7 +116,7 @@ export default function DebugStorage({ account }: { account?: string }) {
                                         </>
                                     ) : (
                                         <>
-                                            <div style={{ width: 40, h: 40, borderRadius: '50%', background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
+                                            <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
                                                 <Unlock size={20} />
                                             </div>
                                             <span style={{ fontWeight: 700, color: '#f59e0b' }}>PLAIN TEXT</span>
@@ -137,7 +136,7 @@ export default function DebugStorage({ account }: { account?: string }) {
                                     gap: 8,
                                     textAlign: 'center'
                                 }}>
-                                    <div style={{ width: 40, h: 40, borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
+                                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
                                         <Database size={20} />
                                     </div>
                                     <span style={{ fontWeight: 700, color: 'var(--text-1)' }}>{(result.size / 1024).toFixed(2)} KB</span>
