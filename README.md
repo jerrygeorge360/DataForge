@@ -178,7 +178,7 @@ The x402 protocol turns HTTP requests into payment channels. External agents inc
 
 ## 6. Smart Contracts
 
-> `DataMarketplace.sol` is deployed on **Filecoin Calibration Testnet**
+> `DataMarketplace.sol` is deployed on **Filecoin Calibration Testnet**: [`0x6bf20ca98180651F08a2cDfB29e449F2467a4Fd8`](https://calibration.filfox.info/en/address/0x6bf20ca98180651F08a2cDfB29e449F2467a4Fd8)
 
 The contract handles the full marketplace lifecycle:
 
@@ -303,7 +303,7 @@ DataForge/
 ├── contracts/
 │   └── DataMarketplace.sol       # Core marketplace contract
 ├── deploy/
-│   └── deploy.ts                 # Hardhat deployment script
+│   └── 01_deploy_marketplace.ts  # Hardhat deployment script
 ├── test/
 │   └── DataMarketplace.test.ts   # 18 contract tests
 ├── backend/

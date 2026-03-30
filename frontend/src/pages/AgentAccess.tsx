@@ -36,7 +36,7 @@ const AGENT_JSON = {
     "standard": "ERC-8004",
     "chain": "base-mainnet"
   },
-  "marketplace": "0x5910e9244b42CbcA40d84878cae6ce294317E1c0"
+  "marketplace": "0x6bf20ca98180651F08a2cDfB29e449F2467a4Fd8"
 }
 
 export default function AgentAccess() {
