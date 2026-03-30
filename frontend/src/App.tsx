@@ -21,7 +21,7 @@ async function getSafeProvider(walletProvider: BrowserProvider | null, fallback:
   if (!walletProvider) return fallback
   try {
     const network = await walletProvider.getNetwork()
-    if (network.chainId !== 314159n) return fallback
+    if (Number(network.chainId) !== 314159) return fallback
     return walletProvider
   } catch {
     return fallback
