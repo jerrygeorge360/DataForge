@@ -155,7 +155,7 @@ function App() {
               onBuyCrypto={() => setShowTransak(true)}
             >
               <WorkspaceRoute>
-                <Dashboard provider={provider!} account={account} />
+                <Dashboard provider={activeProvider} account={account} />
               </WorkspaceRoute>
             </AppShell>
           }
@@ -172,7 +172,7 @@ function App() {
               onBuyCrypto={() => setShowTransak(true)}
             >
               <WorkspaceRoute>
-                <SellerOnboarding provider={provider} account={account} />
+                <SellerOnboarding provider={activeProvider} account={account} />
               </WorkspaceRoute>
             </AppShell>
           }
