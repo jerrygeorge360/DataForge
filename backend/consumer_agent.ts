@@ -23,7 +23,7 @@ const __dirname  = dirname(__filename)
 dotenv.config({ path: join(__dirname, '../.env') })
 
 const CONSUMER_PRIVATE_KEY = process.env.CONSUMER_PRIVATE_KEY as `0x${string}`
-const PLATFORM_AGENT_URL = process.env.PLATFORM_AGENT_URL || 'http://localhost:4000'
+const PLATFORM_AGENT_URL = process.env.PLATFORM_AGENT_URL || 'https://dataforge.prodigal.sbs'
 const NEAR_AI_API_KEY = process.env.NEAR_AI_API_KEY as string
 const BUDGET_USDC = parseFloat(process.env.BUDGET_USDC || '0.10')
 const GOAL = process.env.AGENT_GOAL || 'Find the most valuable financial or AI training dataset'

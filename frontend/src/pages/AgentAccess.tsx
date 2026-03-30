@@ -43,7 +43,7 @@ export default function AgentAccess() {
   const [totalTransactions, setTotalTransactions] = useState<number | null>(null)
 
   useEffect(() => {
-    fetch('http://localhost:4000/health')
+    fetch('https://dataforge.prodigal.sbs/health')
       .then(res => res.json())
       .then(data => {
         if (data && data.transactions !== undefined) {
@@ -136,7 +136,7 @@ export default function AgentAccess() {
                 Free discovery endpoint. Lists all available datasets directly from the Filecoin marketplace.
               </p>
               <div className="text-xs font-mono p-2 rounded" style={{ color: 'var(--text-2)', backgroundColor: '#000' }}>
-                curl http://localhost:4000/listings
+                curl https://dataforge.prodigal.sbs/listings
               </div>
             </CardContent>
           </Card>
@@ -156,7 +156,7 @@ export default function AgentAccess() {
                 Fetches and decrypts the dataset via Lit Protocol after a Base Sepolia payment.
               </p>
               <div className="text-xs font-mono p-2 rounded" style={{ color: 'var(--text-2)', backgroundColor: '#000' }}>
-                curl http://localhost:4000/dataset/0
+                curl https://dataforge.prodigal.sbs/dataset/0
               </div>
             </CardContent>
           </Card>
@@ -173,7 +173,7 @@ export default function AgentAccess() {
                 Returns platform agent health status and active network connectivity states.
               </p>
               <div className="text-xs font-mono p-2 rounded" style={{ color: 'var(--text-2)', backgroundColor: '#000' }}>
-                curl http://localhost:4000/health
+                curl https://dataforge.prodigal.sbs/health
               </div>
             </CardContent>
           </Card>
