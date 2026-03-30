@@ -37,7 +37,7 @@ export default function ProducerAnalytics({ provider, account }: ProducerAnalyti
             try {
                 const contract = new Contract(MARKETPLACE_ADDRESS || '', MARKETPLACE_ABI, provider)
                 const currentBlock = await provider.getBlockNumber()
-                const startBlock = Math.max(0, currentBlock - 50000) // Approx 7 days
+                const startBlock = Math.max(0, currentBlock - 800)
 
                 const filter = contract.filters.DatasetPurchased(null, null, account)
                 const events = await contract.queryFilter(filter, startBlock, currentBlock)

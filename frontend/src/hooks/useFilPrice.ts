@@ -1,25 +1,18 @@
 import { useState, useEffect, useCallback } from 'react'
 
-const CACHE_KEY = 'dataforge_fil_price'
-const CACHE_DURATION = 60000 // 60 seconds
+let cachedPrice: number | null = null
+let lastFetched: number = 0
+const CACHE_TTL = 5 * 60 * 1000 // 5 minutes
 
-interface PriceState {
-    usd: number
-    lastUpdated: number
-}
 
 export function useFilPrice() {
     const [price, setPrice] = useState<number>(0)
     const [loading, setLoading] = useState(false)
 
     const fetchPrice = useCallback(async () => {
-        const cached = localStorage.getItem(CACHE_KEY)
-        if (cached) {
-            const parsed: PriceState = JSON.parse(cached)
-            if (Date.now() - parsed.lastUpdated < CACHE_DURATION) {
-                setPrice(parsed.usd)
-                return
-            }
+        if (cachedPrice !== null && Date.now() - lastFetched < CACHE_TTL) {
+            setPrice(cachedPrice)
+            return
         }
 
         setLoading(true)
@@ -27,8 +20,9 @@ export function useFilPrice() {
             const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=filecoin&vs_currencies=usd')
             const data = await res.json()
             const usd = data.filecoin.usd
+            cachedPrice = usd
+            lastFetched = Date.now()
             setPrice(usd)
-            localStorage.setItem(CACHE_KEY, JSON.stringify({ usd, lastUpdated: Date.now() }))
         } catch (err) {
             console.warn('Failed to fetch FIL price:', err)
             // Keep existing price if fetch fails
@@ -39,7 +33,7 @@ export function useFilPrice() {
 
     useEffect(() => {
         fetchPrice()
-        const interval = setInterval(fetchPrice, CACHE_DURATION)
+        const interval = setInterval(fetchPrice, CACHE_TTL)
         return () => clearInterval(interval)
     }, [fetchPrice])
 

@@ -57,8 +57,9 @@ function ListingRow({ listing, provider, account, onPurchaseSuccess }: ListingRo
                     ['event DatasetPurchased(uint256 indexed listingId, address indexed buyer, address indexed seller, uint256 price, string cid)'],
                     provider
                 )
+                const currentBlock = await provider.getBlockNumber()
                 const filter = contract.filters.DatasetPurchased(listing.id)
-                const logs = await contract.queryFilter(filter, -2880)
+                const logs = await contract.queryFilter(filter, Math.max(0, currentBlock - 800))
                 setPurchaseCount(logs.length)
             }
         } catch (err) {

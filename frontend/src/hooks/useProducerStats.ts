@@ -31,7 +31,7 @@ export function useProducerStats(provider: BrowserProvider | null, account: stri
         try {
             const contract = new Contract(MARKETPLACE_ADDRESS, MARKETPLACE_ABI, provider)
             const currentBlock = await provider.getBlockNumber()
-            const startBlock = Math.max(0, currentBlock - 2000) // RPC limit is ~16h (2000 blocks)
+            const startBlock = Math.max(0, currentBlock - 800)
 
             const filter = contract.filters.DatasetPurchased(null, null, account)
             const events = await contract.queryFilter(filter, startBlock, currentBlock)
