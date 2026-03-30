@@ -12,5 +12,12 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
+    proxy: {
+      '/api/fil-price': {
+        target: 'https://api.coingecko.com',
+        changeOrigin: true,
+        rewrite: (path) => '/api/v3/simple/price?ids=filecoin&vs_currencies=usd',
+      },
+    },
   },
 })

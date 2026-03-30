@@ -24,7 +24,7 @@ export function useFilPrice() {
 
         setLoading(true)
         try {
-            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=filecoin&vs_currencies=usd')
+            const res = await fetch('/api/fil-price')
             const data = await res.json()
             const usd = data.filecoin.usd
             setPrice(usd)

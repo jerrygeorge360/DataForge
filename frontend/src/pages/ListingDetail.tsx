@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { formatEther } from 'ethers'
+import { formatEther, JsonRpcProvider } from 'ethers'
 import {
     ChevronRight,
     ShieldCheck,
@@ -39,10 +39,14 @@ interface Listing {
     active: boolean
 }
 
+const PUBLIC_RPC = 'https://api.calibration.node.glif.io/rpc/v1'
+const fallbackProvider = new JsonRpcProvider(PUBLIC_RPC)
+
 export default function ListingDetail({ account, provider }: { account?: string, provider?: any }) {
     const { id } = useParams()
     const navigate = useNavigate()
-    const { getListingDetails, purchaseDataset, checkPurchaseState, contract } = useMarketplace(provider)
+    const activeProvider = provider || fallbackProvider
+    const { getListingDetails, purchaseDataset, checkPurchaseState, contract } = useMarketplace(activeProvider)
     const { price: filPrice } = useFilPrice()
 
     const [listing, setListing] = useState<Listing | null>(null)
@@ -99,8 +103,8 @@ export default function ListingDetail({ account, provider }: { account?: string,
             if (!id || !provider || !listing || !contract) return
 
             try {
-                const currentBlock = await provider.getBlockNumber()
-                const startBlock = Math.max(0, currentBlock - 2000)
+                const currentBlock = await activeProvider.getBlockNumber()
+                const startBlock = Math.max(0, currentBlock - 800)
 
                 // 1. Fetch Sales Count
                 const purchaseFilter = contract.filters.DatasetPurchased(BigInt(id))
@@ -135,9 +139,9 @@ export default function ListingDetail({ account, provider }: { account?: string,
         }
 
         fetchDetail()
-        if (id && provider) fetchExtendedData()
+        if (id && activeProvider) fetchExtendedData()
         return () => { cancelled = true }
-    }, [id, getListingDetails, account, checkPurchaseState, provider, listing?.previewCid])
+    }, [id, getListingDetails, account, checkPurchaseState, provider, activeProvider, listing?.previewCid, contract])
 
     const handleBuy = async () => {
         if (!account || !listing) return
