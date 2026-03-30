@@ -172,7 +172,7 @@ DataForge uses **Lit Protocol V8 (Naga SDK)** as the cryptographic enforcement l
 
 ### 💸 x402 Microtransactions
 
-The x402 protocol turns HTTP requests into payment channels. External agents include a USDC payment in their request header — no API keys, no OAuth, no signup. The platform agent verifies the payment on Base Sepolia and fulfils the request. The USDC price is automatically calculated from the listing's FIL price using a CoinGecko oracle with a 60-second cache.
+The x402 protocol turns HTTP requests into payment channels. External agents include a USDC payment in their request header — no API keys, no OAuth, no signup. The platform agent verifies the payment on Base Sepolia and fulfils the request. The USDC price is automatically calculated from the listing's FIL price using a CoinGecko oracle with a 60-second cache
 
 ---
 
