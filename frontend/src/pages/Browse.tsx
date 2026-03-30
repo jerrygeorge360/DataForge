@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
-import { formatEther, JsonRpcProvider } from 'ethers'
+import { formatEther } from 'ethers'
 import {
     Search,
     X,
@@ -34,16 +34,10 @@ interface Listing {
 }
 
 // Fallback public provider for guests
-const PUBLIC_RPC = 'https://api.calibration.node.glif.io/rpc/v1'
-const fallbackProvider = new JsonRpcProvider(PUBLIC_RPC)
-
-export default function Browse({ provider: walletProvider }: { provider?: any }) {
+export default function Browse({ provider, isWrongNetwork }: { provider?: any, isWrongNetwork?: boolean }) {
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const [isWrongNetwork, setIsWrongNetwork] = useState(false)
-    const [safeProvider, setSafeProvider] = useState<any>(fallbackProvider)
-
-    const { getListingCount, getListingDetails } = useMarketplace(safeProvider)
+    const { getListingCount, getListingDetails } = useMarketplace(provider)
     const { price: filPrice } = useFilPrice()
 
     const [allListings, setAllListings] = useState<Listing[]>([])
@@ -61,31 +55,8 @@ export default function Browse({ provider: walletProvider }: { provider?: any })
 
     const loadListings = useCallback(async () => {
         setLoading(true)
-
-        // Network Guard
-        let currentProvider = fallbackProvider
-        if (walletProvider) {
-            try {
-                const network = await walletProvider.getNetwork()
-                if (network.chainId === 314159n) {
-                    currentProvider = walletProvider
-                    setIsWrongNetwork(false)
-                } else {
-                    console.warn('Wallet on wrong network, using fallback RPC')
-                    setIsWrongNetwork(true)
-                    currentProvider = fallbackProvider
-                }
-            } catch (err) {
-                console.error('Failed to check network:', err)
-                currentProvider = fallbackProvider
-            }
-        } else {
-            setIsWrongNetwork(false)
-        }
-        setSafeProvider(currentProvider)
-
         console.log('--- MARKETPLACE DATA LOAD ---')
-        console.log('Provider Type:', currentProvider === walletProvider ? 'Wallet' : 'Public Fallback')
+        console.log('Using Provider:', provider === (window as any).ethereum ? 'Wallet' : 'Public RPC')
 
         try {
             const countBigInt = await getListingCount()
@@ -120,14 +91,14 @@ export default function Browse({ provider: walletProvider }: { provider?: any })
         } finally {
             setLoading(false)
         }
-    }, [getListingCount, getListingDetails, walletProvider])
+    }, [getListingCount, getListingDetails, provider])
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth)
         window.addEventListener('resize', handleResize)
         loadListings()
         return () => window.removeEventListener('resize', handleResize)
-    }, [loadListings, walletProvider]) // Added walletProvider to refresh on connect
+    }, [loadListings, provider])
 
     const updateFilter = (key: string, value: string) => {
         const newParams = new URLSearchParams(searchParams)
@@ -288,7 +259,7 @@ export default function Browse({ provider: walletProvider }: { provider?: any })
                     gap: 8,
                     animation: 'slideDown 0.3s ease-out'
                 }}>
-                    <X size={16} style={{ cursor: 'pointer', opacity: 0.5 }} onClick={() => setIsWrongNetwork(false)} />
+                    <X size={16} />
                     Warning: Your wallet is connected to the wrong network. Please switch to <b>Filecoin Calibration (Chain ID 314159)</b> for marketplace transactions.
                 </div>
             )}

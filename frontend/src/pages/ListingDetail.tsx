@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { formatEther, JsonRpcProvider } from 'ethers'
+import { formatEther } from 'ethers'
 import {
     ChevronRight,
     ShieldCheck,
@@ -40,16 +40,12 @@ interface Listing {
     active: boolean
 }
 
-const PUBLIC_RPC = 'https://api.calibration.node.glif.io/rpc/v1'
-const fallbackProvider = new JsonRpcProvider(PUBLIC_RPC)
 
-export default function ListingDetail({ account, provider }: { account?: string, provider?: any }) {
+export default function ListingDetail({ account, provider, isWrongNetwork }: { account?: string, provider?: any, isWrongNetwork?: boolean }) {
     const { id } = useParams()
     const navigate = useNavigate()
-    const [isWrongNetwork, setIsWrongNetwork] = useState(false)
-    const [safeProvider, setSafeProvider] = useState<any>(fallbackProvider)
 
-    const { getListingDetails, purchaseDataset, checkPurchaseState, contract } = useMarketplace(safeProvider)
+    const { getListingDetails, purchaseDataset, checkPurchaseState, contract } = useMarketplace(provider)
     const { price: filPrice } = useFilPrice()
 
     const [listing, setListing] = useState<Listing | null>(null)
@@ -80,27 +76,7 @@ export default function ListingDetail({ account, provider }: { account?: string,
             if (!id) return
             setLoading(true)
 
-            // Network Guard
-            let currentProvider = fallbackProvider
-            if (provider) {
-                try {
-                    const network = await provider.getNetwork()
-                    if (network.chainId === 314159n) {
-                        currentProvider = provider
-                        setIsWrongNetwork(false)
-                    } else {
-                        console.warn('Wallet on wrong network, using fallback RPC')
-                        setIsWrongNetwork(true)
-                        currentProvider = fallbackProvider
-                    }
-                } catch (err) {
-                    console.error('Failed to check network:', err)
-                    currentProvider = fallbackProvider
-                }
-            } else {
-                setIsWrongNetwork(false)
-            }
-            setSafeProvider(currentProvider)
+
 
             try {
                 const details = await getListingDetails(BigInt(id))
@@ -129,7 +105,7 @@ export default function ListingDetail({ account, provider }: { account?: string,
             if (!id || !provider || !listing || !contract) return
 
             try {
-                const currentBlock = await safeProvider.getBlockNumber()
+                const currentBlock = await provider.getBlockNumber()
                 const startBlock = Math.max(0, currentBlock - 800)
 
                 // 1. Fetch Sales Count
@@ -165,9 +141,9 @@ export default function ListingDetail({ account, provider }: { account?: string,
         }
 
         fetchDetail()
-        if (id && safeProvider) fetchExtendedData()
+        if (id && provider) fetchExtendedData()
         return () => { cancelled = true }
-    }, [id, getListingDetails, account, checkPurchaseState, provider, safeProvider, listing?.previewCid, contract])
+    }, [id, getListingDetails, account, checkPurchaseState, provider, listing?.previewCid, contract])
 
     const handleBuy = async () => {
         if (!account || !listing) return
@@ -295,7 +271,7 @@ export default function ListingDetail({ account, provider }: { account?: string,
                     gap: 12,
                     animation: 'slideDown 0.3s ease-out'
                 }}>
-                    <X size={18} style={{ cursor: 'pointer', opacity: 0.5 }} onClick={() => setIsWrongNetwork(false)} />
+                    <X size={18} style={{ opacity: 0.5 }} />
                     Warning: Your wallet is connected to the wrong network. Please switch to <b>Filecoin Calibration (Chain ID 314159)</b> to purchase datasets.
                 </div>
             )}

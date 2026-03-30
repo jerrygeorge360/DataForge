@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { BrowserProvider } from 'ethers'
+import { BrowserProvider, JsonRpcProvider } from 'ethers'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Landing from './pages/Landing'
 import Browse from './pages/Browse'
@@ -14,8 +14,24 @@ import PublicLayout from './components/layout/PublicLayout'
 import { ConnectCard } from './components/ui/ConnectCard'
 import DebugStorage from './pages/DebugStorage'
 
+const PUBLIC_RPC = 'https://api.calibration.node.glif.io/rpc/v1'
+const fallbackProvider = new JsonRpcProvider(PUBLIC_RPC)
+
+async function getSafeProvider(walletProvider: BrowserProvider | null, fallback: any) {
+  if (!walletProvider) return fallback
+  try {
+    const network = await walletProvider.getNetwork()
+    if (network.chainId !== 314159n) return fallback
+    return walletProvider
+  } catch {
+    return fallback
+  }
+}
+
 function App() {
   const [provider, setProvider] = useState<BrowserProvider | null>(null)
+  const [activeProvider, setActiveProvider] = useState<any>(fallbackProvider)
+  const [isWrongNetwork, setIsWrongNetwork] = useState(false)
   const [account, setAccount] = useState<string>('')
   const [balance, setBalance] = useState<bigint>(0n)
   const [isConnecting, setIsConnecting] = useState(false)
@@ -30,6 +46,13 @@ function App() {
     }
   }, [])
 
+  const checkNetwork = useCallback(async (p: BrowserProvider | null) => {
+    const safe = await getSafeProvider(p, fallbackProvider)
+    setActiveProvider(safe)
+    setIsWrongNetwork(p !== null && safe === fallbackProvider)
+    return safe
+  }, [])
+
   useEffect(() => {
     const ethereum = (window as any).ethereum
     if (ethereum && typeof ethereum.on === 'function') {
@@ -38,11 +61,13 @@ function App() {
           setAccount(accounts[0])
           const p = new BrowserProvider(ethereum)
           setProvider(p)
-          await fetchBalance(accounts[0], p)
+          const safe = await checkNetwork(p)
+          await fetchBalance(accounts[0], safe instanceof BrowserProvider ? safe : p)
         } else {
           setAccount('')
           setProvider(null)
           setBalance(0n)
+          checkNetwork(null)
         }
       })
 
@@ -61,7 +86,8 @@ function App() {
       const accounts = await p.send('eth_requestAccounts', [])
       setProvider(p)
       setAccount(accounts[0])
-      await fetchBalance(accounts[0], p)
+      const safe = await checkNetwork(p)
+      await fetchBalance(accounts[0], safe instanceof BrowserProvider ? safe : p)
     } catch (err) {
       console.error('Connection failed:', err)
     } finally {
@@ -73,6 +99,7 @@ function App() {
     setAccount('')
     setProvider(null)
     setBalance(0n)
+    checkNetwork(null)
   }
 
   // Wrapper for routes to handle AppShell and Protection
@@ -102,7 +129,7 @@ function App() {
           path="/browse"
           element={
             <PublicLayout account={account} onConnect={connectWallet}>
-              <Browse provider={provider} />
+              <Browse provider={activeProvider} isWrongNetwork={isWrongNetwork} />
             </PublicLayout>
           }
         />
@@ -110,7 +137,7 @@ function App() {
           path="/listing/:id"
           element={
             <PublicLayout account={account} onConnect={connectWallet}>
-              <ListingDetail account={account} provider={provider} />
+              <ListingDetail account={account} provider={activeProvider} isWrongNetwork={isWrongNetwork} />
             </PublicLayout>
           }
         />
