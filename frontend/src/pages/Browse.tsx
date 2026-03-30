@@ -40,9 +40,10 @@ const fallbackProvider = new JsonRpcProvider(PUBLIC_RPC)
 export default function Browse({ provider: walletProvider }: { provider?: any }) {
     const [searchParams, setSearchParams] = useSearchParams()
 
-    // Use wallet provider if available, otherwise fallback to public RPC
-    const activeProvider = walletProvider || fallbackProvider
-    const { getListingCount, getListingDetails } = useMarketplace(activeProvider)
+    const [isWrongNetwork, setIsWrongNetwork] = useState(false)
+    const [safeProvider, setSafeProvider] = useState<any>(fallbackProvider)
+
+    const { getListingCount, getListingDetails } = useMarketplace(safeProvider)
     const { price: filPrice } = useFilPrice()
 
     const [allListings, setAllListings] = useState<Listing[]>([])
@@ -60,8 +61,31 @@ export default function Browse({ provider: walletProvider }: { provider?: any })
 
     const loadListings = useCallback(async () => {
         setLoading(true)
+
+        // Network Guard
+        let currentProvider = fallbackProvider
+        if (walletProvider) {
+            try {
+                const network = await walletProvider.getNetwork()
+                if (network.chainId === 314159n) {
+                    currentProvider = walletProvider
+                    setIsWrongNetwork(false)
+                } else {
+                    console.warn('Wallet on wrong network, using fallback RPC')
+                    setIsWrongNetwork(true)
+                    currentProvider = fallbackProvider
+                }
+            } catch (err) {
+                console.error('Failed to check network:', err)
+                currentProvider = fallbackProvider
+            }
+        } else {
+            setIsWrongNetwork(false)
+        }
+        setSafeProvider(currentProvider)
+
         console.log('--- MARKETPLACE DATA LOAD ---')
-        console.log('Provider Type:', walletProvider ? 'Wallet' : 'Public Fallback')
+        console.log('Provider Type:', currentProvider === walletProvider ? 'Wallet' : 'Public Fallback')
 
         try {
             const countBigInt = await getListingCount()
@@ -103,7 +127,7 @@ export default function Browse({ provider: walletProvider }: { provider?: any })
         window.addEventListener('resize', handleResize)
         loadListings()
         return () => window.removeEventListener('resize', handleResize)
-    }, [loadListings])
+    }, [loadListings, walletProvider]) // Added walletProvider to refresh on connect
 
     const updateFilter = (key: string, value: string) => {
         const newParams = new URLSearchParams(searchParams)
@@ -249,6 +273,25 @@ export default function Browse({ provider: walletProvider }: { provider?: any })
 
     return (
         <div style={containerStyle}>
+            {isWrongNetwork && (
+                <div style={{
+                    background: '#fef2f2',
+                    borderBottom: '1px solid #fee2e2',
+                    padding: '12px 20px',
+                    color: '#991b1b',
+                    fontSize: 13,
+                    fontWeight: 600,
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    animation: 'slideDown 0.3s ease-out'
+                }}>
+                    <X size={16} style={{ cursor: 'pointer', opacity: 0.5 }} onClick={() => setIsWrongNetwork(false)} />
+                    Warning: Your wallet is connected to the wrong network. Please switch to <b>Filecoin Calibration (Chain ID 314159)</b> for marketplace transactions.
+                </div>
+            )}
             <header style={headerStyle}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     <h1 style={{ fontSize: 32, fontWeight: 800, color: 'var(--text-1)', margin: 0 }}>Data Marketplace</h1>

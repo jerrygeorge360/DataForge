@@ -11,7 +11,8 @@ import {
     Copy,
     Check,
     Clock,
-    ShoppingBag
+    ShoppingBag,
+    X
 } from 'lucide-react'
 import { useMarketplace } from '../hooks/useMarketplace'
 import { useFilPrice } from '../hooks/useFilPrice'
@@ -45,8 +46,10 @@ const fallbackProvider = new JsonRpcProvider(PUBLIC_RPC)
 export default function ListingDetail({ account, provider }: { account?: string, provider?: any }) {
     const { id } = useParams()
     const navigate = useNavigate()
-    const activeProvider = provider || fallbackProvider
-    const { getListingDetails, purchaseDataset, checkPurchaseState, contract } = useMarketplace(activeProvider)
+    const [isWrongNetwork, setIsWrongNetwork] = useState(false)
+    const [safeProvider, setSafeProvider] = useState<any>(fallbackProvider)
+
+    const { getListingDetails, purchaseDataset, checkPurchaseState, contract } = useMarketplace(safeProvider)
     const { price: filPrice } = useFilPrice()
 
     const [listing, setListing] = useState<Listing | null>(null)
@@ -76,6 +79,29 @@ export default function ListingDetail({ account, provider }: { account?: string,
         const fetchDetail = async () => {
             if (!id) return
             setLoading(true)
+
+            // Network Guard
+            let currentProvider = fallbackProvider
+            if (provider) {
+                try {
+                    const network = await provider.getNetwork()
+                    if (network.chainId === 314159n) {
+                        currentProvider = provider
+                        setIsWrongNetwork(false)
+                    } else {
+                        console.warn('Wallet on wrong network, using fallback RPC')
+                        setIsWrongNetwork(true)
+                        currentProvider = fallbackProvider
+                    }
+                } catch (err) {
+                    console.error('Failed to check network:', err)
+                    currentProvider = fallbackProvider
+                }
+            } else {
+                setIsWrongNetwork(false)
+            }
+            setSafeProvider(currentProvider)
+
             try {
                 const details = await getListingDetails(BigInt(id))
                 if (!cancelled && details) {
@@ -103,7 +129,7 @@ export default function ListingDetail({ account, provider }: { account?: string,
             if (!id || !provider || !listing || !contract) return
 
             try {
-                const currentBlock = await activeProvider.getBlockNumber()
+                const currentBlock = await safeProvider.getBlockNumber()
                 const startBlock = Math.max(0, currentBlock - 800)
 
                 // 1. Fetch Sales Count
@@ -139,9 +165,9 @@ export default function ListingDetail({ account, provider }: { account?: string,
         }
 
         fetchDetail()
-        if (id && activeProvider) fetchExtendedData()
+        if (id && safeProvider) fetchExtendedData()
         return () => { cancelled = true }
-    }, [id, getListingDetails, account, checkPurchaseState, provider, activeProvider, listing?.previewCid, contract])
+    }, [id, getListingDetails, account, checkPurchaseState, provider, safeProvider, listing?.previewCid, contract])
 
     const handleBuy = async () => {
         if (!account || !listing) return
@@ -252,6 +278,27 @@ export default function ListingDetail({ account, provider }: { account?: string,
             padding: '24px 32px',
             animation: 'fadeIn 0.5s ease-out'
         }}>
+            {isWrongNetwork && (
+                <div style={{
+                    background: '#fef2f2',
+                    border: '1px solid #fee2e2',
+                    borderRadius: 12,
+                    padding: '16px 24px',
+                    color: '#991b1b',
+                    fontSize: 14,
+                    fontWeight: 600,
+                    textAlign: 'center',
+                    marginBottom: 24,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 12,
+                    animation: 'slideDown 0.3s ease-out'
+                }}>
+                    <X size={18} style={{ cursor: 'pointer', opacity: 0.5 }} onClick={() => setIsWrongNetwork(false)} />
+                    Warning: Your wallet is connected to the wrong network. Please switch to <b>Filecoin Calibration (Chain ID 314159)</b> to purchase datasets.
+                </div>
+            )}
             {/* Breadcrumb */}
             <nav style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 12 }}>
                 <Link to="/browse" style={{ color: 'var(--text-3)', textDecoration: 'none' }}>Browse</Link>
