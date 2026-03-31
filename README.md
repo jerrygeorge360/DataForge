@@ -21,8 +21,7 @@ A dual-layer decentralized data marketplace where every dataset is backed by a v
 
 ## 📺 Demo Video
 
-[![Watch the demo](https://img.youtube.com/vi/M2nowoVbRWE/maxresdefault.jpg)](https://www.youtube.com/watch?v=M2nowoVbRWE)
-
+[![DataForge Demo Video](https://img.shields.io/badge/Watch_Demo-3--5_min-red?style=for-the-badge&logo=youtube)](https://youtu.be/M2nowoVbRWE)
 ---
 
 ## Table of Contents
