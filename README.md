@@ -1,6 +1,5 @@
 <div align="center">
 
-<!-- PLACEHOLDER: Replace with your banner image (1280×640px recommended) -->
 ![DataForge Banner](./assets/banner.png)
 
 # DataForge
@@ -15,8 +14,8 @@ A dual-layer decentralized data marketplace where every dataset is backed by a v
 [![x402](https://img.shields.io/badge/x402-USDC_Payments-2775CA?style=flat-square)](https://x402.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](./LICENSE)
 
-<!-- PLACEHOLDER: Replace with your live demo link -->
-[🚀 Live Demo](#) · [📺 Watch Demo Video](#-demo-video) · [⚡ Quickstart](./QUICKSTART.md)
+
+[🚀 Live Demo](#) · [📺 Watch Demo Video](https://youtu.be/M2nowoVbRWE) · [⚡ Quickstart](./QUICKSTART.md)
 
 </div>
 
@@ -24,14 +23,7 @@ A dual-layer decentralized data marketplace where every dataset is backed by a v
 
 ## 📺 Demo Video
 
-<!-- PLACEHOLDER: Embed your demo video here -->
-<!-- Option A — YouTube thumbnail link (replace VIDEO_ID): -->
-<!-- [![Watch the demo](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=VIDEO_ID) -->
-
-<!-- Option B — Raw video file: -->
-<!-- <video src="./assets/demo.mp4" controls width="100%"></video> -->
-
-> 📹 **Demo video coming soon.** Check back here or visit the submission page.
+[![Watch the demo](https://img.youtube.com/vi/M2nowoVbRWE/maxresdefault.jpg)](https://www.youtube.com/watch?v=M2nowoVbRWE)
 
 ---
 
@@ -58,7 +50,7 @@ A dual-layer decentralized data marketplace where every dataset is backed by a v
 
 ## 1. Overview
 
-<!-- PLACEHOLDER: Replace with a dual-layer explainer diagram or product screenshot -->
+
 ![DataForge Overview](./assets/overview.png)
 
 DataForge operates on **two distinct layers**:
@@ -76,7 +68,6 @@ Agent:  Discover → Reason → Pay USDC (x402) → Receive plaintext bytes
 
 ## 2. How It Works
 
-<!-- PLACEHOLDER: Replace with a step-by-step flow illustration -->
 ![How It Works](./assets/how-it-works.png)
 
 ### Producer Flow (Human)
