@@ -1,7 +1,5 @@
 <div align="center">
 
-![DataForge Banner](./assets/banner.png)
-
 # DataForge
 
 ### Provenance on Filecoin. Settlement onchain. Agentic access via x402 microtransactions.
